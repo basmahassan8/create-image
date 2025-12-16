@@ -4,12 +4,37 @@ import { UploadIcon, SparklesIcon, DownloadIcon, RefreshIcon, TrashIcon } from '
 import { ImageData, ProcessingState } from './types';
 import { editImageWithGemini } from './services/geminiService';
 
-const SUGGESTED_PROMPTS = [
-  "Change the colors to a cyberpunk neon palette",
-  "Make it look like a vintage polaroid",
-  "Add a dramatic sunset lighting effect",
-  "Convert this to a line art sketch",
-  "Change the purple tones to vibrant orange and teal"
+const PROMPT_CATEGORIES = [
+  {
+    name: "Color & Atmosphere",
+    prompts: [
+      "Change colors to a cyberpunk neon palette",
+      "Apply a vintage sepia filter with film grain",
+      "Add a dramatic sunset lighting effect",
+      "Change the lighting to a moody rainy night",
+      "Convert to black and white high contrast photography"
+    ]
+  },
+  {
+    name: "Art Styles",
+    prompts: [
+      "Convert this to a minimalist line art sketch",
+      "Transform into a detailed oil painting",
+      "Style as a 1990s anime screenshot",
+      "Make it look like a 16-bit pixel art game",
+      "Render as a low-poly 3D model"
+    ]
+  },
+  {
+    name: "Creative Effects",
+    prompts: [
+      "Make the object look like it is made of translucent glass",
+      "Add a futuristic holographic wireframe overlay",
+      "Turn the scene into a miniature diorama tilt-shift",
+      "Make it look like a sticker with a white border",
+      "Apply a psychedelic glitch art effect"
+    ]
+  }
 ];
 
 const App: React.FC = () => {
@@ -138,8 +163,8 @@ const App: React.FC = () => {
             
             {/* Left Column: Controls & Input */}
             <div className="lg:col-span-4 flex flex-col gap-6 order-2 lg:order-1">
-              <div className="bg-slate-900 rounded-2xl p-6 border border-slate-800 shadow-xl">
-                <div className="flex justify-between items-center mb-4">
+              <div className="bg-slate-900 rounded-2xl p-6 border border-slate-800 shadow-xl flex flex-col max-h-[calc(100vh-8rem)]">
+                <div className="flex justify-between items-center mb-4 flex-shrink-0">
                   <h3 className="font-semibold text-white">Edit Instruction</h3>
                   <button 
                     onClick={handleReset} 
@@ -153,22 +178,31 @@ const App: React.FC = () => {
                   value={prompt}
                   onChange={(e) => setPrompt(e.target.value)}
                   placeholder="Describe how you want to change the image... (e.g. 'Change the blue gradient to a fiery red and orange')"
-                  className="w-full h-32 bg-slate-950 border border-slate-700 rounded-xl p-4 text-sm focus:ring-2 focus:ring-yellow-500 focus:border-transparent outline-none resize-none transition-all placeholder:text-slate-600"
+                  className="w-full h-32 bg-slate-950 border border-slate-700 rounded-xl p-4 text-sm focus:ring-2 focus:ring-yellow-500 focus:border-transparent outline-none resize-none transition-all placeholder:text-slate-600 flex-shrink-0"
                 />
 
-                <div className="mt-4 flex flex-wrap gap-2">
-                  {SUGGESTED_PROMPTS.map((suggestion, idx) => (
-                     <button 
-                       key={idx}
-                       onClick={() => setPrompt(suggestion)}
-                       className="text-xs px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-full transition-colors border border-slate-700 text-left"
-                     >
-                       {suggestion}
-                     </button>
+                <div className="mt-4 flex-1 overflow-y-auto pr-2 custom-scrollbar space-y-4">
+                  {PROMPT_CATEGORIES.map((category, catIdx) => (
+                    <div key={catIdx}>
+                      <h4 className="text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-2 sticky top-0 bg-slate-900/95 backdrop-blur py-1 z-10">
+                        {category.name}
+                      </h4>
+                      <div className="flex flex-wrap gap-2">
+                        {category.prompts.map((suggestion, idx) => (
+                           <button 
+                             key={idx}
+                             onClick={() => setPrompt(suggestion)}
+                             className="text-xs px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-lg transition-colors border border-slate-700 text-left hover:border-slate-500 hover:text-white"
+                           >
+                             {suggestion}
+                           </button>
+                        ))}
+                      </div>
+                    </div>
                   ))}
                 </div>
 
-                <div className="mt-6">
+                <div className="mt-6 pt-4 border-t border-slate-800 flex-shrink-0">
                   <button
                     onClick={handleGenerate}
                     disabled={status === ProcessingState.LOADING || !prompt.trim()}
@@ -193,7 +227,7 @@ const App: React.FC = () => {
                 </div>
                 
                 {errorMsg && (
-                  <div className="mt-4 p-3 bg-red-900/20 border border-red-900/50 rounded-lg text-xs text-red-200">
+                  <div className="mt-4 p-3 bg-red-900/20 border border-red-900/50 rounded-lg text-xs text-red-200 flex-shrink-0">
                     {errorMsg}
                   </div>
                 )}

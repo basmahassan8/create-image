@@ -10,9 +10,9 @@ const Header: React.FC = () => {
           </div>
           <div>
             <h1 className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white to-slate-400">
-              Nano Banana
+              imagao
             </h1>
-            <p className="text-xs text-slate-400">Powered by Gemini 2.5 Flash Image</p>
+            <p className="text-xs text-slate-400">Powered by Basma Hassan</p>
           </div>
         </div>
         <div className="hidden md:block">
